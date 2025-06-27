@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Surat Cinta Buat Kamu 💌</title>
+  <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Gloria Hallelujah', cursive;
+      background: linear-gradient(135deg, #ffdde1, #c6f0f6);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .envelope-wrapper {
+      width: 260px;
+      height: 180px;
+      perspective: 800px;
+      position: relative;
+      margin-bottom: 30px;
+      cursor: pointer;
+    }
+
+    .envelope-body {
+      width: 100%;
+      height: 100%;
+      background: #ff9aa2;
+      border-radius: 10px;
+      border: 2px solid #f08080;
+      position: relative;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    }
+
+    .envelope-lid {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: #ffb6b9;
+      border-bottom: 2px solid #f08080;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+      transform-origin: top center;
+      transition: transform 0.6s ease;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+      z-index: 2;
+    }
+
+    .envelope-wrapper.open .envelope-lid {
+      transform: rotateX(-150deg);
+    }
+
+    .clip-heart {
+      position: absolute;
+      top: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 22px;
+      background: #fff0f5;
+      border: 2px solid hotpink;
+      border-radius: 50%;
+      padding: 4px 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+      animation: pulse 1.5s infinite;
+      z-index: 999;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: translateX(-50%) scale(1); }
+      50% { transform: translateX(-50%) scale(1.2); }
+    }
+
+    .envelope-text {
+      position: absolute;
+      top: 68%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 14px;
+      font-weight: bold;
+      color: white;
+      text-shadow: 1px 1px 2px hotpink;
+      pointer-events: none;
+      z-index: 3;
+    }
+
+    .letter {
+      position: absolute;
+      top: 70%;
+      left: 50%;
+      transform: translateX(-50%) translateY(150%);
+      width: 90%;
+      max-width: 360px;
+      background: #fff8f2;
+      padding: 18px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: all 1s ease;
+      background-image: repeating-linear-gradient(
+        to bottom, 
+        #fff8f2, 
+        #fff8f2 23px, 
+        #f1e0d4 24px
+      );
+      border: 1px solid #e0bfb8;
+    }
+
+    .envelope-wrapper.open + .letter {
+      transform: translateX(-50%) translateY(0%);
+      opacity: 1;
+    }
+
+    .typing {
+      display: inline-block;
+      overflow: hidden;
+      white-space: nowrap;
+      animation: typing 3s steps(50, end), blink 0.75s step-end infinite;
+      border-right: 2px solid #333;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink {
+      0%, 100% { border-color: transparent }
+      50% { border-color: #333 }
+    }
+
+    .next-btn {
+      margin-top: 15px;
+      background: linear-gradient(to right, #fda4ba, #ffc1cc);
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+      transition: transform 0.2s ease;
+    }
+
+    .next-btn:hover {
+      transform: scale(1.05);
+    }
+
+    .reaction-buttons {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .reaction-buttons button {
+      background-color: #ffb3c6;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 20px;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .reaction-buttons button:hover {
+      background-color: #ff779e;
+    }
+
+    .dm-button {
+      display: inline-block;
+      margin-top: 15px;
+      background: #a18cd1;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 25px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+      transition: background 0.3s ease;
+    }
+
+    .dm-button:hover {
+      background: #7e74cb;
+    }
+
+    .heart {
+      font-size: 24px;
+      margin-top: 15px;
+      color: hotpink;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.5);
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+    }
+
+    .popup-content {
+      background: white;
+      padding: 20px 25px;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      text-align: center;
+      font-size: 15px;
+      max-width: 90%;
+    }
+
+    .popup-content button {
+      background-color: #ffb6c1;
+      color: white;
+      border: none;
+      padding: 10px 18px;
+      margin: 10px 5px 0;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    @media (max-width: 480px) {
+      .letter {
+        font-size: 13px;
+        padding: 15px;
+      }
+
+      .next-btn, .reaction-buttons button, .dm-button {
+        font-size: 12px;
+        padding: 8px 14px;
+      }
+
+      .envelope-text {
+        font-size: 12px;
+      }
+    }
+.envelope-wrapper.open .clip-heart {
+  display: none;
+}
+
+.popup.shake {
+  animation: shake 0.5s;
+}
+  </style>
+
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+</head>
+<body>
+
+ <div class="envelope-wrapper" onclick="toggleLetter()">
+  <div class="clip-heart">💖</div> <!-- dipindah ke sini -->
+  <div class="envelope-lid"></div>
+  <div class="envelope-body"></div>
+  <div class="envelope-text"> Pencet ini ya masss💌</div>
+</div>
+
+
+  <div class="letter" id="letter">
+    <div id="page1">
+      <p class="typing">Hai mass 🥺</p>
+      <p>Maaf banget ya... aku sadar akhir-akhir ini aku sering gangguin kamu, bikin kamu risih. Aku nyesel banget 😔</p>
+      <p>Aku cuma pengen komunikasi kita balik kayak dulu... yang ringan, hangat, dan nyaman.</p>
+      <p>Aku masih mikirin kamu. Masih suka senyum sendiri kalo inget kamu. aku Masih suka kamu. Masih. Dan gak berubah.</p>
+      <p>Tolong jangan trust issue ya... aku tulus banget nulis ini semua. Kalau kamu baca ini aja aku udah bahagia.</p>
+      <p>Kalau bisa, aku cuma pengen kita ngobrol kayak dulu, tanpa beban, tanpa canggung.</p>
+      <button class="next-btn" onclick="nextPage()">Next ➡️</button>
+    </div>
+    <div id="page2" style="display:none">
+<p>Aku gak tahu gimana caranya berhenti mikirin kamu, padahal aku udah coba </p>
+      <p>Mungkin aku bukan orang terbaik yang pernah kamu temui…</p>
+<p>Tapi aku selalu berusaha jadi yang paling tulus untuk kamu.</p>
+<p>i miss you… bukan cuma karena kebiasaan, tapi karena kenyamanan.</p>
+<p>Kita mungkin lagi jauh, tapi perasaanku gak pernah pergi.</p>
+<p>Semoga suatu hari nanti kamu tahu, betapa berharganya kamu buat aku.</p>
+      <p>Terima kasih udah hadir. Semoga masih mau nerima anomali kayak aku hehe 💌</p>
+      <p id="typingText" style="min-height: 60px;"></p>
+      <p class="heart">❤️</p>
+     <div class="reaction-buttons">
+        <button onclick="popup('makasih yaa udah dibaca 💖')">Aku udah baca</button>
+        <button onclick="popup('awas aja kalo engga, tuh udah di sediain IG nya 💌')">Bales DM aku!!!</button>
+      </div>
+      <a class="dm-button" href="https://instagram.com/aiiiwu1_" target="_blank">DM Aku di IG ✨</a>
+    </div>
+  </div>
+
+  <div class="popup" id="popupBox">
+    <div class="popup-content">
+      <p id="popupMessage"></p>
+      <button onclick="closePopup()">Oke 💖</button>
+    </div>
+  </div>
+
+<div class="popup" id="formPopup">
+  <div class="popup-content">
+    <p>Boleh nanya dikit? <br>Kamu mau maafin aku kan mas?</p>
+    <form id="loveForm">
+      <input type="text" name="jawaban" placeholder="jawab iya plisss 🥺" required style="padding:8px; width: 90%; border-radius:8px; border:1px solid #ccc;">
+      <br><br>
+      <button type="submit">Kirim Jawaban 💌</button>
+    </form>
+  </div>
+</div>
+
+<script>
+  let typingIndex = 0;
+  const textToType = "– Dari aku yang (masih) nungguin kamu💖";
+  const typingTarget = document.getElementById("typingText");
+
+  function toggleLetter() {
+    const wrapper = document.querySelector('.envelope-wrapper');
+    wrapper.classList.toggle('open');
+    if (wrapper.classList.contains('open')) {
+      setTimeout(() => {
+        wrapper.style.display = "none";
+      }, 700);
+    }
+  }
+
+  function nextPage() {
+    document.getElementById("page1").style.display = "none";
+    document.getElementById("page2").style.display = "block";
+    document.getElementById("formPopup").style.display = "flex";
+  }
+
+  function typeText() {
+    if (typingIndex < textToType.length) {
+      typingTarget.innerHTML += textToType.charAt(typingIndex);
+      typingIndex++;
+      setTimeout(typeText, 70);
+    }
+  }
+
+  function popup(message) {
+  const popupBox = document.getElementById("popupBox");
+  const popupMessage = document.getElementById("popupMessage");
+  popupMessage.innerHTML = message + " <br>✨💖✨";
+  popupBox.style.display = "flex";
+
+  // Tambahkan efek getar lucu
+  popupBox.classList.add("shake");
+  setTimeout(() => popupBox.classList.remove("shake"), 600);
+}
+
+ function closePopup() {
+  document.getElementById("popupBox").style.display = "none";
+
+  // Efek confetti lucu 💖
+  confetti({
+    particleCount: 100,
+    spread: 70,
+    origin: { y: 0.6 }
+  });
+}
+
+  // 🔁 Handle kirim jawaban
+  document.getElementById("loveForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const jawaban = this.jawaban.value;
+
+    fetch("https://script.google.com/macros/s/AKfycbxaMSHCKLz6K6u4jfTyEJb7OxMX485SK3ruZJlSnHdp_bEvhLVR95kNpK1cBk6AYTJf/exec", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ "jawaban": jawaban })
+    })
+    .then(response => response.text())
+    .then(result => {
+      alert("Jawabanmu berhasil dikirim 💖");
+      typeText(); // animasi ketikan berjalan
+      document.getElementById("formPopup").style.display = "none";
+    })
+    .catch(error => {
+      alert("Ups! Gagal mengirim jawaban 😢");
+      console.error("Error:", error);
+    });
+  });
+</script>
+</body>
+</html>
